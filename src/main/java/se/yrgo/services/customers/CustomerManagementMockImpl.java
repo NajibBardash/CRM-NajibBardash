@@ -30,7 +30,7 @@ public class CustomerManagementMockImpl implements CustomerManagementService {
 	}
 
 	@Override
-	public void deleteCustomer(Customer oldCustomer) {
+	public void deleteCustomer(Customer oldCustomer) throws CustomerNotFoundException {
 		customerMap.remove(oldCustomer.getCustomerId());
 	}
 
