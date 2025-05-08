@@ -20,7 +20,7 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
     private static final String GET_BY_NAME_SQL = "SELECT * FROM CUSTOMER WHERE COMPANY_NAME=?";
     private static final String GET_ALL_CUSTOMERS_SQL = "SELECT * FROM CUSTOMER";
     private static final String INSERT_CALL_SQL = "INSERT INTO CUSTOMER_CALL (CUSTOMER_ID, TIME_AND_DATE, NOTES) VALUES (?,?,?)";
-    private static final String GET_CALLS_FOR_CUSTOMER = "SELECT TIME_AND_DATE, NOTES FROM CUSTOMER_CALL WHERE CUSTOMER_ID=?";
+    private static final String GET_CALLS_FOR_CUSTOMER_SQL = "SELECT TIME_AND_DATE, NOTES FROM CUSTOMER_CALL WHERE CUSTOMER_ID=?";
 
     private JdbcTemplate template;
 
@@ -72,7 +72,7 @@ public class CustomerDaoJdbcTemplateImpl implements CustomerDao {
     public Customer getFullCustomerDetail(String customerId) throws RecordNotFoundException {
         Customer customer = getById(customerId);
 
-        List<Call> calls = template.query(GET_CALLS_FOR_CUSTOMER,  (rs, rowNum) -> {
+        List<Call> calls = template.query(GET_CALLS_FOR_CUSTOMER_SQL,  (rs, rowNum) -> {
             Date date = rs.getDate("TIME_AND_DATE");
             String notes = rs.getString("NOTES");
             return new Call(notes, date);
