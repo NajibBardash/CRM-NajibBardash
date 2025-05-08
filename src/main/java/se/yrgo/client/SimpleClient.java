@@ -22,8 +22,11 @@ public class SimpleClient {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext container = new ClassPathXmlApplicationContext("application.xml");
 
-//        Code tests for Inlämning 4
+//        Code tests for Inlämning 4 & 5
+//        Same method-tests as last assignment + a few new ones to test for more classes, but I have a time-measurement print around each method.
         CustomerManagementService service = container.getBean("customerManagementService", CustomerManagementService.class);
+                CallHandlingService callService = container.getBean("callHandlingService", CallHandlingService.class);
+                DiaryManagementService diaryService = container.getBean("diaryManagementService", DiaryManagementService.class);
 
         Customer spotify = new Customer("SPO01", "Spotify AB", "bosse@spotify.se", "123456789", "Some notes");
         Call spotifyCall = new Call("Call Jim tomorrow", new java.util.Date());
@@ -86,6 +89,26 @@ public class SimpleClient {
             throw new RuntimeException(e);
         }
 
+        Call newCall = new Call("Larry Wall called from Acme Corp");
+        Action action1 = new Action("Call back Larry to ask how things are going", new GregorianCalendar(2025, Calendar.JULY, 1), "rac");
+        Action action2 = new Action("Check our sales dept to make sure Larry is being tracked", new GregorianCalendar(2025, Calendar.JUNE, 27), "rac");
+
+        List<Action> actions = new ArrayList<>();
+        actions.add(action1);
+        actions.add(action2);
+
+        try{
+            callService.recordCall("SPO01", newCall, actions);
+            System.out.println("Call recorded");
+        }catch (CustomerNotFoundException e){
+            System.out.println("That customer doesn't exist");
+        }
+
+        System.out.println("Here are the outstanding actions:");
+        Collection<Action> incompleteActions = diaryService.getAllIncompleteActions("rac");
+            for (Action next: incompleteActions){
+                System.out.println(next);
+            }
 
 
 //        Code tests for Inlämning 3
